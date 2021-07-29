@@ -25,7 +25,7 @@ const Home = () => {
   );
   const contract = new web3.eth.Contract(
     abi,
-    "0x7Bf09149F2F3a7d2306955294949FCc59211fd9a",
+    "0x29dd851E8919D0988BDD440E7cB4ac5a6aaAaef6",
     (error, result) => { if (error) console.log(error) }
   );
   const [data, setData] = useState(initData);
