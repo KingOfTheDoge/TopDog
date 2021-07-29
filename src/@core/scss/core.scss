@@ -27,6 +27,15 @@ div {
     width: 1200px !important;
   }
 }
+.kt1 {
+  position: relative;
+  left: -12px;
+  top: -12px;
+}
+.kt2,
+.kt3 {
+  display: none;
+}
 // colors
 $white: #fff;
 $gray: #818181;
@@ -187,7 +196,12 @@ a {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
-
+.topdog-image {
+  width: 148px;
+  margin-bottom: 24px;
+  position: relative;
+  left: -32px;
+}
 .main {
   width: 100%;
   height: 2632px;
@@ -209,6 +223,14 @@ a {
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
+  }
+  .scroll {
+    position: absolute;
+    bottom: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    cursor: pointer;
   }
   .main-content {
     padding-top: 124px;
@@ -274,6 +296,9 @@ a {
     font-size: 14px;
     line-height: 24px;
     font-family: luckiestguy;
+  }
+  .main-content {
+    padding-left: 16px !important;
   }
 }
 @media (max-width: 1600px) {
