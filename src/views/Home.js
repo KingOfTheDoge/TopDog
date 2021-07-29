@@ -14,6 +14,8 @@ import { data as initData } from './tables/data-tables/data'
 import GoldBadge from '@src/assets/images/gold.svg'
 import SilverBadge from '@src/assets/images/silver.svg'
 import BronzeBadge from '@src/assets/images/bronze.svg'
+import Bg from '@src/assets/images/bg.png'
+import Dog from '@src/assets/images/dog.png'
 import Spinner from '../@core/components/spinner/Fallback-spinner'
 
 const Home = () => {
@@ -101,29 +103,23 @@ const Home = () => {
 
   return (
     <div>
-      {loading ? (<Spinner />) : (<><Row>
-        {topRanks.map(rank => {
-          const res = getTopRankData(rank - 1)
-
-          return (<Col sm='4' key={rank}>
-            <Card>
-              <CardBody>
-                <p className="text-center">
-                  <img width="20" src={res.badgeIcon} />
-                  <span>{res.badgeText}</span>
-                </p>
-                {renderProfile(data[rank - 1])}
-              </CardBody>
-            </Card>
-          </Col>)
-        })}
-      </Row>
-
-        <Row>
-          <Col sm='12'>
+      <div class="main" style={{backgroundImage: `url(${Bg})`}}>
+        <div class="main-header"></div>
+        <img src={Dog} alt="" class="dogImg" />
+        <p class="c-h3 c-white header-title">KING OF THE<br /><span class="c-h1">DOGE</span></p>
+        <div class="main-content">
+          <p class="c-h2 c-white stats">TOP DOG</p>
+          <p class="c-h4 c-gold stats">0XFFB27DB970B2AFD34AF3</p>
+          <p class="c-h4 c-white stats">TOKENS BOUGHT: 1,422,111</p>
+          <p class="c-h4 c-white stats">TOTAL REWARDS: 1,454,049</p>
+          <div class="rankings">
+            <div class="rankings-header">
+              <p class="c-h2 c-blue">TOP 10 DOGS</p>
+            </div>
             <TableZeroConfig />
-          </Col>
-        </Row></>)}
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

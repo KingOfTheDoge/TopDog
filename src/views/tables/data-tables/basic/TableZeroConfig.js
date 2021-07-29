@@ -3,24 +3,22 @@ import { data, basicColumns } from '../data'
 
 // ** Third Party Components
 import { ChevronDown } from 'react-feather'
-import DataTable from 'react-data-table-component'
+import DataTable, { createTheme } from 'react-data-table-component'
 import { Card, CardHeader } from 'reactstrap'
 
 const DataTablesBasic = () => {
   return (
-    <Card>
-      <CardHeader className="d-block">
-        <h4>TOP 10 BUYERS</h4>
-        <h1 style={{fontSize: "3.25rem", lineHeight: "3.5625rem"}}>Ponzu</h1>
-      </CardHeader>
+    <div>
       <DataTable
         noHeader
         data={data}
         columns={basicColumns}
+        theme="red"
         className='react-dataTable'
-        sortIcon={<ChevronDown size={10} />}
+        sortIcon={<ChevronDown size={10} 
+        style={{backgroundColor: 'transparent' }}/>}
       />
-    </Card>
+    </div>
   )
 }
 

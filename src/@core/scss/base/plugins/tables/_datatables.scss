@@ -22,26 +22,34 @@ table.dataTable {
     .sorting_desc {
       padding-right: inherit;
       &:before {
-        background-image: url(str-replace(str-replace($chevron-up, 'currentColor', $table-head-color), '#', '%23'));
+        background-image: url(str-replace(
+          str-replace($chevron-up, "currentColor", $table-head-color),
+          "#",
+          "%23"
+        ));
         background-repeat: no-repeat;
         background-position: center;
         background-size: 12px;
         color: $body-color;
         width: 14px;
         height: 14px;
-        content: '';
+        content: "";
         right: 0.3rem;
         top: 0.5rem;
       }
       &:after {
-        background-image: url(str-replace(str-replace($chevron-down, 'currentColor', $table-head-color), '#', '%23'));
+        background-image: url(str-replace(
+          str-replace($chevron-down, "currentColor", $table-head-color),
+          "#",
+          "%23"
+        ));
         background-repeat: no-repeat;
         background-position: center;
         background-size: 12px;
         color: $body-color;
         width: 14px;
         height: 14px;
-        content: '';
+        content: "";
         right: 0.3rem;
         top: 1.3rem;
       }
@@ -59,12 +67,12 @@ table.dataTable {
 
 div.dataTables_wrapper .dt-button-collection {
   background-color: $dropdown-bg;
-  > div[role='menu'] {
+  > div[role="menu"] {
     text-align: left;
     box-shadow: 0px 5px 16px -8px;
     min-width: 8rem;
   }
-  [class*='buttons-']:focus {
+  [class*="buttons-"]:focus {
     outline: 0;
   }
 }

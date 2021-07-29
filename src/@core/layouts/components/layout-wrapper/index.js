@@ -56,22 +56,7 @@ const LayoutWrapper = props => {
   }, [])
 
   return (
-    <div
-      className={classnames('app-content content overflow-hidden', {
-        [wrapperClass]: wrapperClass,
-        'show-overlay': navbarStore.query.length
-      })}
-    >
-      <div className='content-overlay'></div>
-      <div className='header-navbar-shadow' />
-      <div
-        className={classnames({
-          'content-wrapper': !appLayout,
-          'content-area-wrapper': appLayout,
-          'container p-0': contentWidth === 'boxed',
-          [`animate__animated animate__${transition}`]: transition !== 'none' && transition.length
-        })}
-      >
+    <div>
         <Tag
           /*eslint-disable */
           {...(layout === 'HorizontalLayout' && !appLayout
@@ -82,7 +67,6 @@ const LayoutWrapper = props => {
           {children}
         </Tag>
       </div>
-    </div>
   )
 }
 

@@ -99,7 +99,7 @@
 // Contexual table inside card radius
 .card {
   table {
-    tr[class*='table-']:last-child {
+    tr[class*="table-"]:last-child {
       td:first-child {
         border-bottom-left-radius: $border-radius;
       }
