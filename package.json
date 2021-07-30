@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.3.21",
     "@casl/ability": "5.2.2",
     "@casl/react": "2.1.1",
     "@fullcalendar/core": "5.3.0",
@@ -30,6 +31,7 @@
     "draftjs-to-html": "0.9.1",
     "file-saver": "2.0.2",
     "flatpickr": "4.6.3",
+    "graphql": "^15.5.1",
     "history": "5.0.0",
     "html-to-draftjs": "1.5.0",
     "intl-messageformat": "7.8.4",

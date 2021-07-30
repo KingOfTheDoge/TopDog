@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Card, CardBody, Row, Col, Button } from 'reactstrap'
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 import DataTable, { createTheme } from 'react-data-table-component'
 import { basicColumns } from './tables/data-tables/data'
 import { ChevronDown } from 'react-feather'
@@ -25,7 +26,7 @@ import Spinner from '../@core/components/spinner/Fallback-spinner'
 
 
 const Home = () => {
-  const topRanks = [1, 2, 3]
+  const topRanks = [1]
   const web3 = new Web3(
     new Web3.providers.HttpProvider("https://bsc-dataseed1.ninicoin.io")
   );
@@ -35,6 +36,8 @@ const Home = () => {
     (error, result) => { if (error) console.log(error) }
   );
   const [data, setData] = useState(initData);
+  const [topDogTotalRewards, setTopDogTotalRewards] = useState(0);
+  const [internalTxs, setInternalTxs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -58,6 +61,7 @@ const Home = () => {
         });
       }
 
+      await getTopDogTotalRewards(data[0].full_name);
       setData(data);
       setLoading(false);
     }
@@ -72,14 +76,112 @@ const Home = () => {
       clearInterval(interval);
     }
   }, [])
-  let kt = 0;
+
+  const getTopDogTotalRewards = async (topDog) => {
+    const cache = new InMemoryCache();
+    const client = new ApolloClient({
+      // Provide required constructor fields
+      cache: cache,
+      uri: 'https://graphql.bitquery.io',
+
+      // Provide some optional constructor fields
+      name: 'react-web-client',
+      version: '1.3',
+      queryDeduplication: false,
+      defaultOptions: {
+        watchQuery: {
+          fetchPolicy: 'cache-and-network',
+        },
+      },
+    });
+
+    await client.query({
+      query: gql`
+        query GetTopDogTotalRewards 
+        {
+            ethereum(network: bsc) {
+              transfers(options: {desc: "block.timestamp.time"}, date: {since: null, till: null}, amount: {gt: 0}, receiver: {is: "${topDog}"}, currency: {is: "0x29dd851E8919D0988BDD440E7cB4ac5a6aaAaef6"}) {
+                  block {
+                    timestamp {
+                      time(format: "%Y-%m-%d %H:%M:%S")
+                    }
+                  }
+                  currency {
+                    address
+                    symbol
+                  }
+                  amount
+                  amountInUSD: amount (in:USD)
+                  transaction {
+                    hash
+                  }
+                  external
+                }
+            }
+        }
+      `
+    })
+      .then(result => {
+        let totalRewards = 0;
+        const internalTxs = result.data.ethereum.transfers.map(tx => {
+          const time = tx.block.timestamp.time;
+
+          totalRewards += tx.amount;
+
+          return {
+            date: `${time}`,
+            amount: tx.amount
+          }
+        });
+
+        setInternalTxs(internalTxs)
+        setTopDogTotalRewards(totalRewards);
+      });
+  }
+
   const renderProfile = (row) => {
-    kt++;
-    return (<div class={"kt" + kt}>
-      <p style={{ maxWidth: '100%', wordWrap: 'break-word' }}>{row.full_name}</p>
-      <a target="_blank" href={`https://bscscan.com/address/${row.full_name}`}>
-        <Button>Visit</Button>
-      </a>
+    const txColumns = [
+      {
+        name: 'Time',
+        selector: 'date',
+        sortable: true,
+        maxWidth: '250px'
+      },
+      {
+        name: 'Amount',
+        selector: 'amount',
+        sortable: true,
+        maxWidth: '250px'
+      },
+    ]
+
+    return (<div className={"kt0"}>
+      <div className="row">
+        <div className="col-sm-4 pt-2">
+          <p style={{ maxWidth: '100%', wordWrap: 'break-word' }}>{row.full_name}</p>
+          <p style={{ maxWidth: '100%', wordWrap: 'break-word' }}>TOKENS BOUGHT: {row.amount}</p>
+          <p style={{ maxWidth: '100%', wordWrap: 'break-word' }}>TOTAL REWARDS: {topDogTotalRewards}</p>
+          <a target="_blank" href={`https://bscscan.com/address/${row.full_name}#tokentxns`}>
+            <Button>Visit</Button>
+          </a>
+        </div>
+        <div className="col-sm-8">
+          <div style={{ maxWidth: '500px' }}>
+            <DataTable
+              noHeader
+              pagination
+              paginationPerPage={5}
+              paginationComponentOptions={{ noRowsPerPage: true }}
+              data={internalTxs}
+              columns={txColumns}
+              theme="red"
+              className='react-dataTable'
+              sortIcon={<ChevronDown size={10}
+                style={{ backgroundColor: 'transparent' }} />}
+            />
+          </div>
+        </div>
+      </div>
     </div>)
   }
 
@@ -126,18 +228,18 @@ const Home = () => {
 
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
-  return (
 
+  return (
     <div>
-      <div class="main" style={{ backgroundImage: `url(${Bg})` }}>
-        <div class="main-header"></div>
-        <img src={Dog} alt="" class="dogImg" />
-        <p class="c-h3 c-white header-title">KING OF THE<br /><span class="c-h1">DOGE</span></p>
-        <img src={Scroll} alt="" class="scroll" onClick={scrollToTop} />
-        <div class="main-content">
+      <div className="main" style={{ backgroundImage: `url(${Bg})` }}>
+        <div className="main-header"></div>
+        <img src={Dog} alt="" className="dogImg" />
+        <p className="c-h3 c-white header-title">KING OF THE<br /><span className="c-h1">DOGE</span></p>
+        <img src={Scroll} alt="" className="scroll" onClick={scrollToTop} />
+        <div className="main-content">
           <div>
-            <img src={TopDog} alt="" class="topdog-image" />
-            <span class="c-h2 c-white stats" style={{ position: 'relative', left: -32 }}>TOP DOG</span>
+            <img src={TopDog} alt="" className="topdog-image" />
+            <span className="c-h2 c-white stats" style={{ position: 'relative', left: -32 }}>TOP DOG</span>
           </div>
           {loading ? (<Spinner />) : (<>
             {topRanks.map(rank => {
@@ -148,9 +250,9 @@ const Home = () => {
               </Col>)
             })}
           </>)}
-          <div class="rankings">
-            <div class="rankings-header">
-              <p class="c-h2 c-blue">TOP 10 DOGS</p>
+          <div className="rankings">
+            <div className="rankings-header">
+              <p className="c-h2 c-blue">TOP 10 DOGS</p>
             </div>
             <div>
               <DataTable
