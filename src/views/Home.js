@@ -100,7 +100,13 @@ const Home = () => {
         query GetTopDogTotalRewards 
         {
             ethereum(network: bsc) {
-              transfers(options: {desc: "block.timestamp.time"}, date: {since: null, till: null}, amount: {gt: 0}, receiver: {is: "${topDog}"}, currency: {is: "0x29dd851E8919D0988BDD440E7cB4ac5a6aaAaef6"}) {
+              transfers(
+                options: {desc: "block.timestamp.time"},
+                amount: {gt: 0},
+                receiver: {is: "${topDog}"},
+                currency: {is: "0x29dd851E8919D0988BDD440E7cB4ac5a6aaAaef6"},
+
+              ) {
                   block {
                     timestamp {
                       time(format: "%Y-%m-%d %H:%M:%S")
