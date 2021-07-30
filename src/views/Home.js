@@ -99,31 +99,33 @@ const Home = () => {
       query: gql`
         query GetTopDogTotalRewards 
         {
-            ethereum(network: bsc) {
-              transfers(
-                options: {desc: "block.timestamp.time"},
-                amount: {gt: 0},
-                receiver: {is: "${topDog}"},
-                currency: {is: "0x29dd851E8919D0988BDD440E7cB4ac5a6aaAaef6"},
-
-              ) {
-                  block {
-                    timestamp {
-                      time(format: "%Y-%m-%d %H:%M:%S")
-                    }
+          ethereum(network: bsc) {
+            transfers(
+              options: {desc: "block.timestamp.time"},
+              amount: {gteq: 0},
+              receiver: {is: "${topDog}"},
+              currency: {is: "0x29dd851E8919D0988BDD440E7cB4ac5a6aaAaef6"}
+            ) {
+                block {
+                  timestamp {
+                    time(format: "%Y-%m-%d %H:%M:%S")
                   }
-                  currency {
-                    address
-                    symbol
-                  }
-                  amount
-                  amountInUSD: amount (in:USD)
-                  transaction {
-                    hash
-                  }
-                  external
                 }
-            }
+                currency {
+                  address
+                  symbol
+                }
+                sender {
+                  address
+                }
+                amount
+                amountInUSD: amount (in:USD)
+                transaction {
+                  hash
+                }
+                external
+              }
+          }
         }
       `
     })
@@ -139,6 +141,8 @@ const Home = () => {
             amount: tx.amount
           }
         });
+
+        console.log(internalTxs, result.data.ethereum.transfers);
 
         setInternalTxs(internalTxs)
         setTopDogTotalRewards(totalRewards);
